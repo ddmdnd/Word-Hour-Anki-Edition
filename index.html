@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#f6f5f2"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Word Hour">
+<link rel="manifest" href="./manifest.webmanifest"><link rel="apple-touch-icon" href="./icons/icon-192.png"><link rel="stylesheet" href="./styles.css">
+<title>Word Hour — интервальное повторение</title>
+</head>
+<body>
+<div class="app">
+<header class="topbar"><a class="brand"><span class="mark">W</span>word<span>hour</span></a><span class="topnote">ТВОЙ СЛОВАРЬ</span></header>
+<main>
+<section id="view-study" class="view active">
+  <div class="heading"><div><small>ИНТЕРВАЛЬНОЕ ПОВТОРЕНИЕ</small><h1>Учить слова</h1></div><span id="due-badge" class="pill">0 к повторению</span></div>
+  <div id="study-overview" class="panel">
+    <div class="stats3"><div><b id="due-count">0</b><span>к повторению</span></div><div><b id="new-count">0</b><span>новых слов</span></div><div><b id="learned-count">0</b><span>выучено</span></div></div>
+    <p class="muted">Сначала повторяем слова, которым уже пришло время. Затем добавляем новые — в пределах дневного лимита.</p>
+    <button id="start-study" class="primary wide">Начать повторение →</button>
+    <button id="resume-study" class="secondary wide hidden">Продолжить сессию →</button>
+    <p class="tiny muted center">Твои ответы влияют на то, когда слово появится снова.</p>
+  </div>
+  <div id="study-session" class="hidden"></div>
+  <div id="study-done" class="panel done hidden"><div class="done-icon">✓</div><h2>Отличная работа!</h2><p id="study-done-text" class="muted"></p><button id="study-again" class="primary wide">Ещё одна сессия</button></div>
+</section>
+
+<section id="view-dictionary" class="view">
+  <div class="heading"><div><small>ТВОЯ КОЛЛЕКЦИЯ</small><h1>Словарь</h1></div><span id="word-count" class="pill">0 слов</span></div>
+  <div class="actions"><button id="add-word" class="primary">＋ Добавить</button><button id="import-open" class="secondary">Импорт</button></div>
+  <div class="toolbar"><input id="search" placeholder="Найти слово или перевод…"><select id="filter"><option value="all">Все</option><option value="new">Новые</option><option value="due">К повторению</option><option value="learned">Выученные</option><option value="difficult">Сложные</option><option value="favorite">Избранные</option></select></div>
+  <div id="bulk" class="bulk hidden"><span id="selected-count">Выбрано: 0</span><button id="bulk-delete" class="danger">Удалить выбранные</button></div>
+  <div id="dictionary-list" class="list"></div>
+  <div class="list-footer"><button id="export-csv" class="linkbtn">Экспорт CSV ↓</button><span id="page-info" class="tiny muted"></span></div>
+  <div class="pagination"><button id="prev-page" class="secondary">Назад</button><button id="next-page" class="secondary">Далее</button></div>
+</section>
+
+<section id="view-trainers" class="view">
+  <div class="heading"><div><small>ПРАКТИКА И ЗАПОМИНАНИЕ</small><h1>Тренажёры</h1></div></div>
+  <p class="muted intro">Выбери формат упражнения. Результаты учитываются в твоём прогрессе.</p>
+  <div id="trainer-menu" class="trainer-grid">
+    <button data-mode="flash" class="trainer"><i>▤</i><b>Карточки</b><small>Вспомни перевод и оцени себя</small></button>
+    <button data-mode="choice" class="trainer"><i>☷</i><b>Выбери перевод</b><small>Тест с четырьмя вариантами</small></button>
+    <button data-mode="typing" class="trainer"><i>⌨</i><b>Введи перевод</b><small>Напечатай ответ самостоятельно</small></button>
+    <button data-mode="matching" class="trainer"><i>⇄</i><b>Найди пары</b><small>Соедини слово и перевод</small></button>
+    <button data-mode="reverse" class="trainer fullspan"><i>↔</i><b>Обратный перевод</b><small>Сначала перевод — затем английское слово</small></button>
+  </div>
+  <div class="panel trainer-options"><label>Размер сессии<select id="trainer-size"><option value="10">10 карточек</option><option value="20">20 карточек</option><option value="50">50 карточек</option><option value="all">Все доступные</option></select></label><label>Набор слов<select id="trainer-pool"><option value="due-new">К повторению + новые</option><option value="all">Все слова</option><option value="difficult">Сложные</option><option value="favorite">Избранные</option></select></label></div>
+  <div id="trainer-session" class="hidden"></div>
+  <div id="trainer-done" class="panel done hidden"><div class="done-icon">✓</div><h2>Тренировка завершена!</h2><p id="trainer-done-text" class="muted"></p><button id="back-trainers" class="primary wide">Выбрать другой тренажёр</button></div>
+</section>
+
+<section id="view-progress" class="view">
+  <div class="heading"><div><small>ТВОЙ РЕЗУЛЬТАТ</small><h1>Прогресс</h1></div></div>
+  <div class="stats2">
+    <div class="stat"><small>В СЛОВАРЕ</small><b id="p-total">0</b><span>слов</span></div><div class="stat"><small>ВЫУЧЕНО</small><b id="p-learned">0</b><span>слов</span></div>
+    <div class="stat"><small>К ПОВТОРЕНИЮ</small><b id="p-due">0</b><span>сейчас</span></div><div class="stat"><small>СЛОЖНЫЕ</small><b id="p-difficult">0</b><span>на повторение</span></div>
+  </div>
+  <div class="panel"><div class="progress-title"><b>Общий прогресс</b><strong id="p-percent">0%</strong></div><div class="bar"><span id="p-bar"></span></div><p id="p-desc" class="muted"></p></div>
+  <div class="stats2 smallstats"><div class="stat"><small>ТОЧНОСТЬ</small><b id="p-accuracy">—</b><span>последние 30 ответов</span></div><div class="stat"><small>СЕРИЯ</small><b id="p-streak">0</b><span>дней подряд</span></div></div>
+  <div class="panel"><h3>Последние повторения</h3><div id="review-history" class="history"><p class="muted">История появится после тренировки.</p></div></div>
+</section>
+
+<section id="view-more" class="view">
+  <div class="heading"><div><small>ДОПОЛНИТЕЛЬНО</small><h1>Ещё</h1></div></div>
+  <div class="hourly">
+    <div class="hourly-head"><small>СЛОВО ЭТОГО ЧАСА</small><span>● LIVE</span></div><h2 id="hour-word">Accomplish</h2><p id="hour-translation">достигать</p><div class="hourly-foot"><span id="hour-countdown">Следующее слово через —</span><button id="hour-next" class="linkbtn">Предпросмотр →</button></div>
+  </div>
+  <div class="panel more-panel">
+    <div class="setting-row"><div><b>Виджет iPhone</b><small>Через приложение Scriptable</small></div><button id="show-widget" class="secondary">Настроить</button></div>
+    <div id="widget-info" class="hidden widget-info"><p class="muted">Установи Scriptable. Сохрани <code>words.json</code> в iCloud Drive → Scriptable → WordHour. Создай скрипт из файла WordHour-Widget.js, затем добавь виджет Scriptable на экран «Домой» и выбери этот скрипт.</p><button id="widget-json" class="primary wide">Скачать words.json</button><button id="widget-script" class="secondary wide">Скачать скрипт виджета</button><p class="tiny muted">iOS сама управляет обновлением виджетов и может задерживать его.</p></div>
+    <div class="setting-row"><div><b>Настройки повторения</b><small>Интервалы и дневной лимит</small></div><button id="show-settings" class="secondary">Открыть</button></div>
+    <div id="settings-info" class="hidden settings-info">
+      <label>Язык перевода<select id="language"><option value="ru">Русский</option><option value="uk">Українська</option><option value="both">Оба языка</option></select></label>
+      <label>Новых слов в день<select id="new-limit"><option>5</option><option>10</option><option>15</option><option>20</option><option>30</option><option>50</option></select></label>
+      <div class="intervals"><small>НАЧАЛЬНЫЕ ИНТЕРВАЛЫ</small><div class="grid2"><label>Не знаю, минут<input id="i-again" type="number" min="1" max="120"></label><label>Тяжело, дней<input id="i-hard" type="number" min="1" max="30"></label><label>Знаю, дней<input id="i-good" type="number" min="1" max="90"></label><label>Легко, дней<input id="i-easy" type="number" min="1" max="180"></label></div></div>
+      <label class="switchrow">Почасовая смена слова<input id="hourly-toggle" type="checkbox"></label>
+      <button id="save-settings" class="primary wide">Сохранить настройки</button>
+    </div>
+    <div class="setting-row"><div><b>Резервная копия</b><small>Слова, интервалы и прогресс</small></div><button id="backup" class="secondary">Экспорт JSON</button></div>
+    <div class="setting-row"><div><b>Удалить весь словарь</b><small>Сбросить все слова и прогресс</small></div><button id="clear-all" class="danger">Удалить</button></div>
+  </div>
+</section>
+</main>
+<nav class="nav">
+<button class="active" data-view="study"><span>◉</span><small>Учить</small></button>
+<button data-view="dictionary"><span>▤</span><small>Словарь</small></button>
+<button data-view="trainers"><span>✳</span><small>Тренажёры</small></button>
+<button data-view="progress"><span>▥</span><small>Прогресс</small></button>
+<button data-view="more"><span>•••</span><small>Ещё</small></button>
+</nav>
+</div>
+<input id="file-input" type="file" accept=".csv,.txt,.json,.xlsx,.xls" hidden>
+<div id="modal" class="modal hidden"><div id="modal-content" class="modal-content"></div></div>
+<div id="toast" class="toast"></div>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script><script src="./app.js"></script>
+</body></html>
